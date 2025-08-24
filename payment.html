@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>VoltRescue - Manual Payment</title>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #111;
+      color: white;
+      text-align: center;
+      padding-top: 50px;
+    }
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+      margin: 10px;
+      border-radius: 8px;
+      border: none;
+    }
+    input {
+      width: 200px;
+    }
+    button {
+      background-color: #00ff88;
+      color: #000;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>VoltRescue Payment</h1>
+
+  <input type="text" id="razorpayKey" placeholder="Enter Razorpay Key ID"><br>
+  <input type="number" id="amountInput" placeholder="Enter amount (INR)" min="1"><br>
+  <button onclick="startPayment()">Pay Now</button>
+
+  <script>
+    function startPayment() {
+      const key = document.getElementById('razorpayKey').value;
+      const amount = document.getElementById('amountInput').value;
+
+      if (!key || !amount || amount <= 0) {
+        alert("Please enter a valid Razorpay Key and amount.");
+        return;
+      }
+
+      var options = {
+        "key": key,
+        "amount": amount * 100, // Convert to paise
+        "currency": "INR",
+        "name": "VoltRescue",
+        "description": "Service Payment",
+        "image": "https://yourdomain.com/logo.png", // Optional
+        "handler": function (response) {
+          alert("Payment Successful!\nPayment ID: " + response.razorpay_payment_id);
+          // Optionally, send this response to your server for verification
+        },
+        "prefill": {
+          "name": "Customer Name",
+          "email": "customer@example.com",
+          "contact": "9999999999"
+        },
+        "theme": {
+          "color": "#00ff88"
+        }
+      };
+
+      var rzp = new Razorpay(options);
+      rzp.open();
+    }
+  </script>
+
+</body>
+</html>

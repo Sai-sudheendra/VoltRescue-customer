@@ -1,0 +1,457 @@
+/* === Global Styles === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  background-color: #0d1117;
+  color: #e6f1e7;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 2rem;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* === Logo === */
+.logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.logo img {
+  width: 110px;
+  filter: drop-shadow(0 0 6px #00ff88aa);
+}
+
+/* === Headings === */
+h1, h2 {
+  text-align: center;
+  margin-bottom: 1.2rem;
+  color: #00ff88;
+  letter-spacing: 1.3px;
+  text-shadow: 0 0 6px #00ff88aa;
+}
+
+/* === Form Containers === */
+.form-container,
+.login-container,
+.signup-container {
+  background: #161b22;
+  padding: 2.5rem 2.5rem 2rem;
+  border-radius: 20px;
+  box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  color: #e6f1e7;
+}
+
+/* === Service Selection Specific === */
+body.service-selection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 2rem;
+}
+
+.form-container.service-selection {
+  max-width: 400px;
+  padding: 2.5rem 3rem;
+  color: #e6f1e7;
+}
+
+h1.service-selection {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 600;
+  color: #00ff88;
+  text-align: center;
+  margin-bottom: 2rem;
+  text-shadow: 0 0 8px #00ff88aa;
+}
+
+/* === Form Elements === */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+select {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  margin-bottom: 1.25rem;
+  border: none;
+  border-radius: 12px;
+  background-color: #21262d;
+  color: #cde5c8;
+  font-size: 1rem;
+  box-shadow: inset 0 0 8px #00593388;
+  transition: box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+  cursor: pointer;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  box-shadow: 0 0 8px 2px #00ff88cc;
+  background-color: #1b241f;
+  color: #d0f2bf;
+}
+
+/* === Buttons === */
+button,
+.login-button,
+.signup-button,
+.google-button {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: none;
+  border-radius: 14px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  font-family: Arial, Helvetica, sans-serif;
+  box-shadow: 0 4px 15px #00ff8844;
+  color: #0d1117;
+  user-select: none;
+}
+
+button:focus,
+.login-button:focus,
+.signup-button:focus,
+.google-button:focus {
+  outline: 3px solid #00ff88cc;
+  outline-offset: 2px;
+}
+
+.login-button,
+.signup-button {
+  background-color: #00ff88;
+  box-shadow: 0 0 15px #00ff88aa;
+  color: #0d1117;
+}
+
+.login-button:hover,
+.signup-button:hover {
+  background-color: #00cc70;
+  box-shadow: 0 0 20px #00cc70cc;
+}
+
+.google-button {
+  background-color: #fff;
+  color: #0d1117;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  box-shadow: 0 4px 15px #55555544;
+  border-radius: 16px;
+  padding: 0.85rem 1.2rem;
+  font-weight: 600;
+}
+
+.google-button img {
+  width: 22px;
+}
+
+.google-button:hover {
+  background-color: #ddd;
+  box-shadow: 0 4px 20px #99999988;
+}
+
+/* === Divider === */
+.divider {
+  position: relative;
+  margin: 1.5rem 0;
+  font-size: 0.9rem;
+  color: #6aa675cc;
+  text-align: center;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 40%;
+  height: 1px;
+  background: #00442299;
+}
+
+.divider::before { left: 0; }
+.divider::after { right: 0; }
+
+/* === Link Section === */
+.link-section {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 1rem;
+  color: #9be6ad;
+}
+
+.link-section a {
+  color: #00ff88;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.link-section a:hover {
+  text-decoration: underline;
+  color: #00cc70;
+}
+
+/* === Info Bar === */
+.info-bar {
+  background-color: #002d13;
+  color: #00ff88;
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 1rem;
+  box-shadow: 0 0 10px #00ff8833;
+}
+
+/* === Notification Page === */
+#requestsList {
+  width: 100%;
+  max-width: 640px;
+  list-style: none;
+}
+
+.request-item {
+  background: #161b22;
+  padding: 1.2rem 1.75rem;
+  margin-bottom: 1.25rem;
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: background-color 0.3s ease;
+}
+
+.request-item:hover {
+  background-color: #0f1910;
+}
+
+.request-header {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #00ff88cc;
+  letter-spacing: 0.5px;
+}
+
+.request-detail {
+  font-size: 1rem;
+  color: #a0f6b5;
+  letter-spacing: 0.2px;
+}
+
+.request-actions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 1.2rem;
+}
+
+.accept-btn,
+.reject-btn {
+  padding: 0.6rem 1.25rem;
+  font-weight: 700;
+  border-radius: 14px;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+.accept-btn {
+  background-color: #00ff88;
+  color: #0d1117;
+  box-shadow: 0 0 15px #00ff88aa;
+}
+
+.accept-btn:hover {
+  background-color: #00cc70;
+}
+
+.reject-btn {
+  background-color: #ff4d4d;
+  color: #fff;
+  box-shadow: 0 0 15px #ff4d4daa;
+}
+
+.reject-btn:hover {
+  background-color: #cc0000;
+}
+
+/* === No Requests === */
+#noRequests {
+  margin-top: 2.5rem;
+  font-size: 1.2rem;
+  color: #666;
+  font-style: italic;
+  text-align: center;
+}
+
+/* === Loader === */
+#loader {
+  width: 48px;
+  height: 48px;
+  margin: 3.5rem auto;
+  border: 5px solid #161b22;
+  border-top: 5px solid #00ff88;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* === Service Selection Specific === */
+/* Using form-container.service-selection above */
+
+#statusText {
+  margin-top: 1rem;
+  font-size: 1rem;
+  text-align: center;
+  color: #00ff88cc;
+  min-height: 1.2rem;
+}
+
+/* === Request Help Form Styles === */
+.service-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.service-btn {
+  flex: 1;
+  background: #e0e7ff;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 10px;
+  margin: 0 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-weight: 600;
+  color: #333;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.service-btn img {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 6px;
+}
+
+.service-btn.selected {
+  background: #6ff16357; /* Indigo-500 */
+  color: white;
+  border-color: #4f46e5; /* Indigo-600 */
+}
+
+/* Label for inputs */
+label {
+  display: block;
+  margin-top: 1rem;
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+  text-align: left;
+  color: #00ff88;
+  text-shadow: 0 0 5px #00ff88cc;
+}
+
+/* Submit Button */
+#requestHelpBtn {
+  background-color: #00ff88;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #0d1117;
+  padding: 0.8rem 1rem;
+  margin-top: 1.5rem;
+  cursor: pointer;
+  box-shadow: 0 0 15px #00ff88aa;
+  border: none;
+  width: 100%;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#requestHelpBtn:hover {
+  background-color: #00cc70;
+  box-shadow: 0 0 20px #00cc70cc;
+}
+
+/* === Responsive Adjustments === */
+@media (max-width: 500px) {
+  .service-buttons {
+    flex-direction: column;
+  }
+
+  .service-btn {
+    margin: 5px 0;
+  }
+}
+    html, body, #map {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    #info {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: white;
+      padding: 16px;
+      border-radius: 10px;
+      font-family: sans-serif;
+      z-index: 1000;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      width: 220px;
+    }
+
+    #info b {
+      color: #1f2930;
+    }
+
+    #info hr {
+      margin: 10px 0;
+    }
+
+    #paymentBtn {
+      margin-top: 10px;
+      padding: 8px 12px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      width: 100%;
+    }
+
+    #paymentBtn:hover {
+      background-color: #0056b3;
+    }
+
+    .leaflet-routing-container {
+      display: none !important;
+    }
+  

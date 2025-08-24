@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>VoltRescue Tracking</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    html, body, #map {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    #info {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: white;
+      padding: 16px;
+      border-radius: 10px;
+      font-family: sans-serif;
+      z-index: 1000;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      width: 220px;
+    }
+
+    #info b { color: #1f2930; }
+    #info hr { margin: 10px 0; }
+
+    #paymentBtn {
+      margin-top: 10px;
+      padding: 8px 12px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      width: 100%;
+    }
+
+    #paymentBtn:hover {
+      background-color: #0056b3;
+    }
+
+    .leaflet-routing-container {
+      display: none !important;
+    }
+
+    #refreshBtn {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      z-index: 1000;
+    }
+
+    #refreshBtn:hover {
+      background-color: #1e7e34;
+    }
+  </style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<div id="info">
+  <b>Provider</b><br>
+  Name: <span id="providerName"></span><br>
+  Phone: <span id="providerPhone"></span><br>
+  Payment ID: <span id="providerPayment"></span><br>
+  <hr>
+  Distance: <span id="distance">--</span> km<br>
+  ETA: <span id="eta">--</span> mins<br>
+  <button id="paymentBtn" onclick="redirectToPayment()">Payment</button>
+</div>
+
+<!-- Refresh Button -->
+<button id="refreshBtn" onclick="location.reload()">🔄</button>
+
+<!-- Scripts -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.min.js"></script>
+
+<script>
+  function redirectToPayment() {
+    window.location.href = "payment.html";
+  }
+
+  // Initialize Firebase apps
+  const providerApp = firebase.initializeApp({
+    apiKey: "AIzaSyAAyrEFXbkXBLdLL5GfC1uhKtwXtyxw2Co",
+    authDomain: "provider-be5bb.firebaseapp.com",
+    databaseURL: "https://provider-be5bb-default-rtdb.firebaseio.com",
+    projectId: "provider-be5bb",
+    storageBucket: "provider-be5bb.appspot.com",
+    messagingSenderId: "369217308539",
+    appId: "1:369217308539:android:15ed20e5b6899114845fde"
+  }, "provider");
+
+  const customerApp = firebase.initializeApp({
+    apiKey: "AIzaSyAqrdaF-b89oIkq5pcPU5S29HdbvuuVFdI",
+    authDomain: "customer-cf63b.firebaseapp.com",
+    databaseURL: "https://customer-cf63b-default-rtdb.firebaseio.com",
+    projectId: "customer-cf63b",
+    storageBucket: "customer-cf63b.appspot.com",
+    messagingSenderId: "994638162715",
+    appId: "1:994638162715:android:869a9f3ea345edb12dc1be"
+  }, "customer");
+
+  const providerDB = providerApp.database();
+  const customerDB = customerApp.database();
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const customerId = urlParams.get("customerId");
+  const providerId = urlParams.get("providerId");
+
+  if (!customerId || !providerId) {
+    alert("Missing customerId or providerId in URL.");
+    throw new Error("Missing URL parameters");
+  }
+
+  const map = L.map("map").setView([0, 0], 2);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+
+  const providerIcon = L.icon({
+    iconUrl: "https://cdn-icons-png.flaticon.com/512/726/726448.png",
+    iconSize: [38, 38],
+    iconAnchor: [19, 38]
+  });
+
+  const customerIcon = L.icon({
+    iconUrl: "https://cdn-icons-png.flaticon.com/512/1077/1077012.png",
+    iconSize: [38, 38],
+    iconAnchor: [19, 38]
+  });
+
+  let providerLatLng = null;
+  let customerLatLng = null;
+  let providerMarker = null;
+  let customerMarker = null;
+  let routeControl = null;
+
+  function updateETA(distKm) {
+    const eta = distKm > 0 ? Math.round((distKm / 40) * 60) : 0;
+    document.getElementById("distance").textContent = distKm.toFixed(2);
+    document.getElementById("eta").textContent = eta;
+  }
+
+  function getDistanceKm(lat1, lon1, lat2, lon2) {
+    const R = 6371;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) ** 2 +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLon / 2) ** 2;
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  }
+
+  function refreshRoute() {
+    if (!providerLatLng || !customerLatLng) return;
+
+    const dist = getDistanceKm(providerLatLng[0], providerLatLng[1], customerLatLng[0], customerLatLng[1]);
+    updateETA(dist);
+
+    if (routeControl && routeControl._container) {
+      try {
+        map.removeControl(routeControl);
+      } catch (err) {
+        console.warn("Route removal failed:", err);
+      }
+    }
+
+    routeControl = L.Routing.control({
+      waypoints: [
+        L.latLng(providerLatLng[0], providerLatLng[1]),
+        L.latLng(customerLatLng[0], customerLatLng[1])
+      ],
+      createMarker: () => null,
+      lineOptions: {
+        styles: [{ color: "red", weight: 6, opacity: 0.9 }]
+      },
+      draggableWaypoints: false,
+      addWaypoints: false,
+      show: false
+    }).addTo(map);
+  }
+
+  customerDB.ref("locations/" + customerId).on("value", snapshot => {
+    const loc = snapshot.val();
+    if (loc && typeof loc.lat === "number" && typeof loc.lng === "number") {
+      customerLatLng = [loc.lat, loc.lng];
+      if (customerMarker) {
+        customerMarker.setLatLng(customerLatLng);
+      } else {
+        customerMarker = L.marker(customerLatLng, { icon: customerIcon }).addTo(map).bindPopup("Customer");
+        map.setView(customerLatLng, 13);
+      }
+      refreshRoute();
+    } else {
+      console.error("Customer location missing or invalid.");
+    }
+  });
+
+  providerDB.ref("providers/" + providerId).once("value").then(snapshot => {
+    const data = snapshot.val();
+    if (data) {
+      document.getElementById("providerName").textContent = data.name || "";
+      document.getElementById("providerPhone").textContent = data.phone || "";
+      document.getElementById("providerPayment").textContent = data.paymentId || "";
+    }
+  });
+
+  providerDB.ref("locations/" + providerId).on("value", snapshot => {
+    const loc = snapshot.val();
+    if (loc && typeof loc.lat === "number" && typeof loc.lng === "number") {
+      providerLatLng = [loc.lat, loc.lng];
+      if (providerMarker) {
+        providerMarker.setLatLng(providerLatLng);
+      } else {
+        providerMarker = L.marker(providerLatLng, { icon: providerIcon }).addTo(map).bindPopup("Provider");
+      }
+      refreshRoute();
+    } else {
+      console.warn("Provider location missing or invalid.");
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VoltRescue customer - Log In</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="login-container">
+    <div class="logo">
+      <img src="voltrescue-logo.png" alt="VoltRescue Logo">
+    </div>
+    <h2>Log In as customer</h2>
+    <form id="loginForm">
+      <input type="email" id="email" placeholder="Email Address" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <button type="submit" class="login-button">Log In</button>
+    </form>
+
+    <div class="divider">OR</div>
+
+    <button class="google-button" id="googleBtn">
+      <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google Logo">
+      Continue with Google
+    </button>
+
+    <div class="signup-link">
+      Don’t have an account? <a href="customer_signup.html">Sign up here</a>
+    </div>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+
+  <!-- Custom JS -->
+  <script src="login.js"></script>
+</body>
+</html>

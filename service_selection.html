@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VoltRescue - Request Help</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="form-container">
+    <h1>Request Help</h1>
+
+    <div class="service-buttons">
+      <button type="button" class="service-btn" onclick="selectService('EV-to-EV Charging', this)">
+        <img src="ev_icon.png" alt="EV Charging" />
+        EV-to-EV Charging
+      </button>
+      <button type="button" class="service-btn" onclick="selectService('Portable Charger', this)">
+        <img src="charger_icon.png" alt="Portable Charger" />
+        Portable Charger
+      </button>
+    </div>
+
+    <input type="hidden" id="serviceType" />
+
+    <label for="name">Name</label>
+    <input type="text" id="name" placeholder="Your name" required />
+
+    <label for="phone">Phone Number</label>
+    <input type="tel" id="phone" placeholder="123-456-7890" required />
+
+    <label for="vehicle">Vehicle</label>
+    <input type="text" id="vehicle" placeholder="Tesla Model 3" required />
+
+    <button class="confirm-btn" onclick="submitRequest()">Confirm</button>
+
+    <div class="status" id="statusText"></div>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="service_selection.js"></script>
+
+</body>
+</html>
